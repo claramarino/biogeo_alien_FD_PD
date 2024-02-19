@@ -1,5 +1,6 @@
 # create clean public data
 # fd, pd, ses, insular contexts (for SEM)
+rm(list=ls())
 
 
 library(tidyverse)
@@ -20,17 +21,23 @@ pd_nat <- readRDS("Data/11_pd_+_ses_natives_world.rds")
 # islands from Weigelt et al 2013
 wi_ok <- readRDS("Data/01_islands_from_weigelt_et_al.rds")
 
+# colonization pressure info for a subset of islands
+cp_dat <- readRDS("Data/R1_Col_pressure_96_isl.rds")
+
 ######### Clean and join tables ############
 
 
-var_ok <- var %>% 
+var_ok <- left_join(var %>% 
   mutate(connect = nb_ap + nb_ap_buff_100) %>% # transform connect as slmp 
   # remove var not used in models
   select(-c(varP, varT, HFI, GDP_mean, GDP_max, GDP_0_free, intact, Long,
             GMMC, nb_ap, nb_ap_buff_50, nb_ap_buff_100, dist_ap)) %>%
   rename(SR_nat = native_sp_rich,
          GDP = GDP_sum) %>% 
-  mutate(ID = as.character(ID))
+  mutate(ID = as.character(ID)),
+  cp_dat %>% 
+    mutate(ID = as.character(ID)) %>%
+    rename(CP = n))
 
 
 nat_all <- left_join(pd_nat, fric_nat) %>%
@@ -54,7 +61,7 @@ all = left_join(var_ok, left_join(alien_all, nat_all))
 colnames(all)
 all_ok <- all %>%
   mutate_at(c("Area", "Dist", "fric_alien", "fric_nat", "PD_alien", 
-              "PD_nat", "SR_alien", "SR_nat"), log) %>%
+              "PD_nat", "SR_alien", "SR_nat", "CP"), log) %>%
   mutate_at(c("pop", "Elev","GDP", "connect"), ~log(.+1)) %>%
   mutate(Lat = abs(Lat)) %>%
   # scale variables before SEM
@@ -74,7 +81,7 @@ all_isl <- inner_join(wi_ok, all_ok) %>%
          SES_FD_nat = SES_fric_nat) %>%
   select(ID, ARCHIP, ISLAND, LONG, LAT, Realm,
          Area, Dist, SLMP, Elev, Lat,
-         pop, static_modif, modif_change, GDP, connect,
+         pop, static_modif, modif_change, GDP, connect, CP,
          SR_nat, FD_nat, SES_FD_nat, PD_nat, SES_PD_nat,
          SR_alien, FD_alien, SES_FD_alien, PD_alien, SES_PD_alien)
 
