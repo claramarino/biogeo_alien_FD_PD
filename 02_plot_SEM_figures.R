@@ -9,18 +9,18 @@ library(tidyverse)
 
 # save objects for figures 
 # fd
-mod_fd <- readRDS("Output/15_SEM_Fric_realm_model")
-eff_fd <- readRDS("Output/15_SEM_Fric_realm_boot_effects")
+mod_fd <- readRDS("Output/01_SEM_Fric_realm_model")
+eff_fd <- readRDS("Output/01_SEM_Fric_realm_boot_effects")
 # pd
-mod_pd <- readRDS("Output/15_SEM_PD_realm_model")
-eff_pd <- readRDS("Output/15_SEM_PD_realm_boot_effects")
+mod_pd <- readRDS("Output/01_SEM_PD_realm_model")
+eff_pd <- readRDS("Output/01_SEM_PD_realm_boot_effects")
 
 # SES_fd
-mod_fd_ses <- readRDS("Output/15_SEM_sesFric_realm_model")
-eff_fd_ses <- readRDS("Output/15_SEM_sesFric_realm_boot_effects")
+mod_fd_ses <- readRDS("Output/01_SEM_sesFric_realm_model")
+eff_fd_ses <- readRDS("Output/01_SEM_sesFric_realm_boot_effects")
 # SES_pd
-mod_pd_ses <- readRDS("Output/15_SEM_sesPD_realm_model")
-eff_pd_ses <- readRDS("Output/15_SEM_sesPD_realm_boot_effects")
+mod_pd_ses <- readRDS("Output/01_SEM_sesPD_realm_model")
+eff_pd_ses <- readRDS("Output/01_SEM_sesPD_realm_boot_effects")
 
 
 eff_fd$Summary

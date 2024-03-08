@@ -131,3 +131,69 @@ dev.off()
 pdf("Fig/17_Fig_1_FD_PD_values.pdf", 7,3)
 fd_pd
 dev.off()
+
+
+################ BASIC ANALYSES RESPONSE VARIABLES #################
+
+
+summary(all$SES_fric_alien)
+sum(abs(all$SES_fric_alien)>1.96)
+sum((all$SES_fric_alien)>1.96)
+
+summary(all$SES_PD_alien)
+sum(abs(all$SES_PD_alien)>1.96)
+sum((all$SES_PD_alien)>1.96)
+
+cor(all$fric_alien, all$PD_alien)
+cor.test(all$fric_alien, all$PD_alien)
+
+cor.test(all_scaled$fric_alien, all_scaled$PD_alien)
+
+plot(all$fric_alien, all$PD_alien)
+
+plot(all_scaled$PD_log_scale, all_scaled$FD_log_scale)
+cor.test(all_scaled$PD_log_scale, all_scaled$FD_log_scale)
+
+colnames(all_scaled)
+
+ggplot(all_scaled, aes(fric_alien, PD_alien))+
+  geom_point()+
+  geom_smooth()
+
+ggplot(all_scaled, aes(FD_scale, PD_scale))+
+  geom_point()+
+  geom_smooth()
+
+ggplot(all_scaled, aes(PD_log_scale, FD_log_scale))+
+  geom_point()+
+  geom_smooth()
+
+ggplot(all_scaled, aes(SR_alien, PD_log_scale))+
+  geom_point()+
+  geom_smooth()
+ggplot(all_scaled, aes(SR_alien, FD_log_scale))+
+  geom_point()+
+  geom_smooth()
+ggplot(all_scaled, aes(SR_alien, PD_scale))+
+  geom_point()+
+  geom_smooth()
+ggplot(all_scaled, aes(SR_alien, FD_scale))+
+  geom_point()+
+  geom_smooth()
+
+
+cor.test(all_scaled$SR_alien, all_scaled$PD_alien)
+cor.test(all_scaled$SR_alien, all_scaled$fric_alien)
+
+
+dat <- read.csv2("Z:/THESE/6_Projects/biogeo_FD_alien/biogeo_alien_FD_PD/Data/Marino_et_al_DATA_407_ISL.csv")
+colnames(dat)
+ggplot(dat, aes(SR_alien, FD_alien))+
+  geom_point()+
+  geom_smooth()
+ggplot(dat, aes(SR_alien, PD_alien))+
+  geom_point()+
+  geom_smooth()
+ggplot(dat, aes(FD_alien, PD_alien))+
+  geom_point()+
+  geom_smooth()

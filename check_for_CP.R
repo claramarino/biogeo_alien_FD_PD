@@ -46,6 +46,9 @@ gavia_oi <- gavia %>%
   filter(CPrecord=="TRUE")
 length(unique(gavia_oi$SpeciesID))
 
+sum(is.na(gavia_oi$IntroducedDateGrouped))
+sum(is.na(gavia$IntroducedDateGrouped))
+
 
 dat <- read.csv2("Z:/THESE/6_Projects/biogeo_FD_alien/biogeo_alien_FD_PD/Data/Marino_et_al_DATA_407_ISL.csv")
 
@@ -117,10 +120,45 @@ ggplot(dat_cp, aes(x=SR_alien, y = n))+
   geom_point()+
   geom_smooth()
 
+colnames(gavia)
+
+
+tsi <- left_join(gav_to_match, gavia %>% select(RecordID, IntroducedDateGrouped))
+min_tsi <- tsi %>%
+  filter(!is.na(IntroducedDateGrouped)) %>%
+  group_by(ID) %>%
+  summarize(TSI = min(IntroducedDateGrouped)) %>%
+  filter(!is.na(ID)) %>% filter(!is.na(TSI))
+
+cp_tsi <- left_join(min_tsi, isl_w_cp)
+cor.test(cp_tsi$n, cp_tsi$TSI)
+hist(cp_tsi$TSI)
+
+
+plot(cp_tsi$TSI, cp_tsi$n)
+
 #save the colonization pressure info in a table for analyses
 saveRDS(isl_w_cp, "Data/R1_Col_pressure_96_isl.rds")
+# save tsi 
+saveRDS(min_tsi, "Data/R1_TSI_83_isl.rds")
 
 
+
+dat_cp_tsi <- left_join(dat, cp_tsi)
+plot(dat_cp_tsi$TSI, dat_cp_tsi$SR_alien)
+
+ggplot(dat_cp_tsi, aes(x=TSI, y = n))+
+  geom_point() +
+  theme_classic()+
+  xlab("Date of first alien bird introduction")+
+  ylab("Colonization pressure")
+
+#saveRDS(dat_cp_tsi, "Data/R1_CP_96_TFI_80_isl.rds")
+
+
+colnames(gavia)
+
+dat_cp_tsi <- readRDS("Data/R1_CP_96_TFI_80_isl.rds")
 
 #remove all islands with less than 3 CP because we must have at least 4 species on all islands
 
