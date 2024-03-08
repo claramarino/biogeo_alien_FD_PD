@@ -21,8 +21,11 @@ pd_nat <- readRDS("Data/11_pd_+_ses_natives_world.rds")
 # islands from Weigelt et al 2013
 wi_ok <- readRDS("Data/01_islands_from_weigelt_et_al.rds")
 
+# time of first introduction +
 # colonization pressure info for a subset of islands
-cp_dat <- readRDS("Data/R1_Col_pressure_96_isl.rds")
+tsi <- readRDS("Data/R1_TSI_83_isl.rds")
+cp <- readRDS("Data/R1_Col_pressure_96_isl.rds")
+
 
 ######### Clean and join tables ############
 
@@ -35,9 +38,14 @@ var_ok <- left_join(var %>%
   rename(SR_nat = native_sp_rich,
          GDP = GDP_sum) %>% 
   mutate(ID = as.character(ID)),
-  cp_dat %>% 
-    mutate(ID = as.character(ID)) %>%
-    rename(CP = n))
+  left_join(
+    cp %>% 
+      mutate(ID = as.character(ID)) %>%
+      rename(CP=n),
+    tsi %>% 
+      mutate(ID = as.character(ID),
+             TSFI = 2020 - TSI)) %>%
+    select(-TSI))
 
 
 nat_all <- left_join(pd_nat, fric_nat) %>%
@@ -61,7 +69,7 @@ all = left_join(var_ok, left_join(alien_all, nat_all))
 colnames(all)
 all_ok <- all %>%
   mutate_at(c("Area", "Dist", "fric_alien", "fric_nat", "PD_alien", 
-              "PD_nat", "SR_alien", "SR_nat", "CP"), log) %>%
+              "PD_nat", "SR_alien", "SR_nat", "CP", "TSFI"), log) %>%
   mutate_at(c("pop", "Elev","GDP", "connect"), ~log(.+1)) %>%
   mutate(Lat = abs(Lat)) %>%
   # scale variables before SEM
@@ -81,7 +89,7 @@ all_isl <- inner_join(wi_ok, all_ok) %>%
          SES_FD_nat = SES_fric_nat) %>%
   select(ID, ARCHIP, ISLAND, LONG, LAT, Realm,
          Area, Dist, SLMP, Elev, Lat,
-         pop, static_modif, modif_change, GDP, connect, CP,
+         pop, static_modif, modif_change, GDP, connect, CP, TSFI,
          SR_nat, FD_nat, SES_FD_nat, PD_nat, SES_PD_nat,
          SR_alien, FD_alien, SES_FD_alien, PD_alien, SES_PD_alien)
 
