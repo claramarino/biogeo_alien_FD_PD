@@ -40,19 +40,19 @@ modif <- lm(modif_change ~ GDP + pop + Elev + SLMP + connect, data = isl_CP)
 
 nat_SR <- lm(SR_nat ~ Area + Dist + Lat + Elev + SLMP, data = isl_CP)
 nat_PD <- lm(PD_nat ~ Area + Dist + Lat + Elev + SLMP + SR_nat, data = isl_CP)
-nat_fric <- lm(FD_nat ~ Area + Dist + Lat + Elev + SLMP + SR_nat, data = isl_CP)
+nat_FD <- lm(FD_nat ~ Area + Dist + Lat + Elev + SLMP + SR_nat, data = isl_CP)
 
 alien_SR <- lm(SR_alien ~ Area + Dist + Lat + Elev + SLMP + SR_nat + 
                  pop + GDP + modif_change + static_modif + connect, data = isl_CP)
 alien_PD <- lm(PD_alien ~ Area + Dist + Lat + Elev + SLMP + SR_nat + PD_nat +
                  pop + GDP + modif_change + static_modif + connect + SR_alien, 
                data = isl_CP)
-alien_fric <- lm(FD_alien ~ Area + Dist + Lat + Elev + SLMP + SR_nat + FD_nat +
+alien_FD <- lm(FD_alien ~ Area + Dist + Lat + Elev + SLMP + SR_nat + FD_nat +
                    pop + GDP + modif_change + static_modif + connect + SR_alien, 
                  data = isl_CP)
 
 # build total model
-# one for fric and one for pd
+# one for FD and one for pd
 
 pd_mod <- psem(pop, GDP, connect, static, modif,
                   nat_SR, nat_PD, alien_SR, alien_PD,
@@ -66,16 +66,16 @@ pd_mod <- psem(pop, GDP, connect, static, modif,
 fisherC(pd_mod) # F.C = 43.6, df = 34, P = 0.12 
 rsquared(pd_mod)
 
-fric_mod <- psem(pop, GDP, connect, static, modif, 
-                    nat_SR, nat_fric, alien_SR, alien_fric,
+FD_mod <- psem(pop, GDP, connect, static, modif, 
+                    nat_SR, nat_FD, alien_SR, alien_FD,
                     SR_nat %~~% connect,
                     FD_nat %~~% pop,
                     FD_nat %~~% static_modif, 
                     FD_nat %~~% connect,
                     data = isl_CP)
-d1 <- dSep(fric_mod)
-fisherC(fric_mod) # F.C = 36, df = 34, P = .345 
-rsquared(fric_mod)
+d1 <- dSep(FD_mod)
+fisherC(FD_mod) # F.C = 36, df = 34, P = .345 
+rsquared(FD_mod)
 
 
 ###### Second models: with CP in the SEM ######
@@ -87,22 +87,22 @@ static <- lm(static_modif ~ GDP + pop + modif_change + Area + Lat + connect, dat
 modif <- lm(modif_change ~ GDP + pop + Elev + SLMP + connect, data = isl_CP)
 CP <- lm(CP ~ pop + GDP + connect + Dist + Area + static_modif, data = isl_CP)
 # biotic context depends on biogeographic variables
-# native SR drives native fric & PD
+# native SR drives native FD & PD
 nat_SR <- lm(SR_nat ~ Area + Dist + Lat + Elev + SLMP, data = isl_CP)
 nat_PD <- lm(PD_nat ~ Area + Dist + Lat + Elev + SLMP + SR_nat, data = isl_CP)
-nat_fric <- lm(FD_nat ~ Area + Dist + Lat + Elev + SLMP + SR_nat, data = isl_CP)
+nat_FD <- lm(FD_nat ~ Area + Dist + Lat + Elev + SLMP + SR_nat, data = isl_CP)
 # alien diversities depend on all contextual variables
 alien_SR <- lm(SR_alien ~ Area + Dist + Lat + Elev + SLMP + SR_nat + 
                    pop + GDP + modif_change + static_modif + connect + CP, data = isl_CP)
 alien_PD <- lm(PD_alien ~ Area + Dist + Lat + Elev + SLMP + SR_nat + PD_nat +
                    pop + GDP + modif_change + static_modif + connect + CP + SR_alien, 
                  data = isl_CP)
-alien_fric <- lm(FD_alien ~ Area + Dist + Lat + Elev + SLMP + SR_nat + FD_nat +
+alien_FD <- lm(FD_alien ~ Area + Dist + Lat + Elev + SLMP + SR_nat + FD_nat +
                      pop + GDP + modif_change + static_modif + connect + CP + SR_alien, 
                    data = isl_CP)
 
 # build total model
-# one for fric and one for pd
+# one for FD and one for pd
 
 cp_pd_mod <- psem(pop, GDP, connect, static, modif, CP,
                nat_SR, nat_PD, alien_SR, alien_PD,
@@ -118,19 +118,19 @@ cp_pd_mod <- psem(pop, GDP, connect, static, modif, CP,
 fisherC(cp_pd_mod) 
 #d1[which.max(abs(d1$Crit.Value)),] 
 
-cp_fric_mod <- psem(pop, GDP, connect, static, modif, CP,
-                 nat_SR, nat_fric, alien_SR, alien_fric,
+cp_FD_mod <- psem(pop, GDP, connect, static, modif, CP,
+                 nat_SR, nat_FD, alien_SR, alien_FD,
                  SR_nat %~~% connect,
                  SR_nat %~~% CP,
                  FD_nat %~~% pop,
                  FD_nat %~~% static_modif, 
                  FD_nat %~~% connect,
                  data = isl_CP)
-#d1 <- dSep(cp_fric_mod)
-fisherC(cp_fric_mod)
+#d1 <- dSep(cp_FD_mod)
+fisherC(cp_FD_mod)
 #d1[which.max(abs(d1$Crit.Value)),] 
 
-rsquared(cp_fric_mod)
+rsquared(cp_FD_mod)
 rsquared(cp_pd_mod)
 
 ########## Get direct/ indirect effects of the 2 models without CP  ######
@@ -139,7 +139,7 @@ R_sample = 10000
 
 Sys.time()
 
-boot_mod_fd <- bootEff(fric_mod, R = R_sample)
+boot_mod_fd <- bootEff(FD_mod, R = R_sample)
 eff_fd <- semEff(boot_mod_fd)
 
 Sys.time()
@@ -152,7 +152,7 @@ Sys.time()
 ##### Save outputs  ######
 
 # fd
-saveRDS(fric_mod, "Output/11_SEM_noCP_FD_model.rds")
+saveRDS(FD_mod, "Output/11_SEM_noCP_FD_model.rds")
 saveRDS(eff_fd, "Output/11_SEM_noCP_FD_boot_eff.rds")
 # pd
 saveRDS(pd_mod, "Output/11_SEM_noCP_PD_model.rds")
@@ -165,7 +165,7 @@ R_sample = 10000
 
 Sys.time()
 
-cp_boot_mod_fd <- bootEff(cp_fric_mod, R = R_sample)
+cp_boot_mod_fd <- bootEff(cp_FD_mod, R = R_sample)
 cp_eff_fd <- semEff(cp_boot_mod_fd)
 
 Sys.time()
@@ -178,7 +178,7 @@ Sys.time()
 ##### Save outputs 
 
 # fd
-saveRDS(cp_fric_mod, "Output/11_SEM_CP_FD_model.rds")
+saveRDS(cp_FD_mod, "Output/11_SEM_CP_FD_model.rds")
 saveRDS(cp_eff_fd, "Output/11_SEM_CP_FD_boot_eff.rds")
 # pd
 saveRDS(cp_pd_mod, "Output/11_SEM_CP_PD_model.rds")
@@ -197,6 +197,6 @@ coefs[coefs$P.Value<0.05,]
 
 
 # for FD 
-rsquared(cp_fric_mod)
-coefs <- coefs(cp_fric_mod) 
+rsquared(cp_FD_mod)
+coefs <- coefs(cp_FD_mod) 
 coefs[coefs$P.Value<0.05,]

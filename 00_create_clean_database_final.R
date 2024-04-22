@@ -11,8 +11,8 @@ library(tidyverse)
 var <- readRDS("Data/07_oce_isl.rds") 
 
 # alien diversities
-fric_alien <- readRDS("Data/13_func_div_ses_world.rds")
-pd_alien <- readRDS("Data/11_pd_by_isl_world.rds")
+fric_alien <- readRDS("Data/13_func_div_ses_world_alien_only.rds")
+pd_alien <- readRDS("Data/11_pd_by_isl_world_alien_only.rds")
 
 # native diversities
 fric_nat <- readRDS("Data/13_fric_+_ses_natives_isl_over3.rds")
@@ -97,3 +97,54 @@ all_isl <- inner_join(wi_ok, all_ok) %>%
 colnames(all_isl)
 
 write.csv2(all_isl, "Data/Marino_et_al_DATA_407_ISL.csv", row.names = F)
+
+
+
+
+#### Check the influence of pool for null models (SES) ####
+
+all_isl <- read.csv("Data/Marino_et_al_DATA_407_ISL.csv", sep = ";")
+
+# pool 1 => null models are drawn within all birds (n=10,862)
+fd_alien_pool1 <- readRDS("Data/13_func_div_ses_world.rds") %>%
+  .[.$isl%in% all_isl$ID, ]
+pd_alien_pool1 <- readRDS("Data/11_pd_by_isl_world.rds") %>%
+  .[.$isl%in% all_isl$ID, ]
+
+# pool 2 => null models are drawn within alien birds only (n=952)
+pd_alien_pool2 <- readRDS("Data/11_pd_by_isl_world_alien_only.rds") %>%
+  .[.$isl%in% all_isl$ID, ]
+fd_alien_pool2 <- readRDS("Data/13_func_div_ses_world_alien_only.rds")
+
+# Compare the two pools
+pd_all <- left_join(pd_alien_pool1 %>% rename(ses_PD_all = ses_PD,
+                                        PD_mean1 = PD_mean),
+                    pd_alien_pool2 %>% rename(ses_PD_alien = ses_PD,
+                                           PD_mean2 = PD_mean))
+
+fd_all <- left_join(fd_alien_pool1 %>% rename(ses_FD_all = SES_fric,
+                                              FD_mean1 = fric),
+                    fd_alien_pool2 %>% rename(ses_FD_alien = SES_fric,
+                                              FD_mean2 = fric))
+
+ggplot(pd_all, aes(x=ses_PD_all, y = ses_PD_alien))+
+  geom_point()
+hist(pd_all$ses_PD_all)
+hist(pd_all$ses_PD_alien)
+t.test(pd_all$ses_PD_alien)
+# t = -13.562, df = 406, p-value < 2.2e-16, mean = -0.8937138
+cor.test(pd_all$ses_PD_all, pd_all$ses_PD_alien)
+# cor = 0.9784464 
+
+ggplot(fd_all, aes(x=ses_FD_all, y = ses_FD_alien))+
+  geom_point()
+hist(fd_all$ses_FD_all)
+hist(fd_all$ses_FD_alien)
+t.test(fd_all$ses_FD_alien)
+# t = -33.579, df = 406, p-value < 2.2e-16, mean = -0.9188079
+cor.test(fd_all$ses_FD_all, fd_all$ses_FD_alien)
+# cor = 0.9556737 
+
+
+# the two pools give very similar values for final SES FD/PD
+# we select the more conservative, ie the pool 2 with all alien birds
