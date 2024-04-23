@@ -1,12 +1,14 @@
 
 
 # Biogeography of alien birds
-<!-- badges: start -->
+<a href="https://zenodo.org/doi/10.5281/zenodo.10797742"><img src="https://zenodo.org/badge/715508118.svg" alt="DOI"></a> <!-- badges: start -->
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://choosealicense.com/licenses/mit/)
 <!-- badges: end -->
 
 Scripts and data for reproducing the results obtained by Marino et al. in the paper **The Anthropocene biogeography of alien birds on islands: drivers of their functional and phylogenetic diversities**.
+
+
 
 ## Description of the Data
 All information related to data are detailed in `Data/README.md`. The main data file `Marino_et_al_DATA_407_ISL.csv` contains the name, location, and characteristics of all the 407 islands studied in the associated paper. Lines refer to islands.
