@@ -1,8 +1,8 @@
-# Data
-The data folder contains the main data file used for performing all the analyses from the associated paper (Marino_et_al_DATA_407_ISL.csv). However, we also provide intermediate data files that can be useful for understanding the process of final data obtention, or for exploring deeper the different robustness analyses we conducted in the Supplementary Material.
+# `Data`
+The `Data/` folder contains the main data file used for performing all the analyses from the associated paper `Marino_et_al_DATA_407_ISL.csv`. However, we also provide intermediate data files that can be useful for understanding the process of final data obtention, or for exploring deeper the different robustness analyses we conducted in the Supplementary Material.
 
-## Description of the main data file: Marino_et_al_DATA_407_ISL.csv
-Data file Marino_et_al_DATA_407_ISL.csv contains the name, location, and characteristics of all the 407 islands studied in the associated paper. Lines refer to islands.
+## Description of `Marino_et_al_DATA_407_ISL.csv`
+Data file `Marino_et_al_DATA_407_ISL.csv` contains the name, location, and characteristics of all the 407 islands studied in the associated paper. Lines refer to islands.
 
 Column description:
 
@@ -45,18 +45,18 @@ Column description:
 ## Description of other provided data files
 
 ### Island data (geographic and human contexts)
-- 01_islands_from_weigelt_et_al.rds: database of global islands from Weigelt et al. (2014)
-- 07_oce_isl.rds: dataset containing all the contextual variable we retrieved for the oceanic islands. All data sources are detailed in the Methods section of the associated paper and are also listed in the References below.
+- `01_islands_from_weigelt_et_al.rds`: database of global islands from Weigelt et al. (2014)
+- `07_oce_isl.rds`: dataset containing all the contextual variable we retrieved for the oceanic islands. All data sources are detailed in the Methods section of the associated paper and are also listed in the References below.
 
 ### PD and SES-PD of native and alien birds
-- 11_pd_+_ses_natives_world.rds: output of the scripts that compute PD and SES-PD, for native birds
-- 11_pd_by_isl_world.rds: output of the scripts that compute PD and SES-PD for alien birds, using as global pool for null models all birds in the world (n=10,862)
-- 11_pd_by_isl_world_alien_only.rds: output of the scripts that compute PD and SES-PD for alien birds, using as global pool for null models alien birds only (n=952)
+- `11_pd_+_ses_natives_world.rds`: output of the scripts that compute PD and SES-PD, for native birds
+- `11_pd_by_isl_world.rds`: output of the scripts that compute PD and SES-PD for alien birds, using as global pool for null models all birds in the world (n=10,862)
+- `11_pd_by_isl_world_alien_only.rds`: output of the scripts that compute PD and SES-PD for alien birds, using as global pool for null models alien birds only (n=952)
 
 ### FD and SES-FD of native and alien birds
-- 13_fric_+_ses_natives_isl_over3.rds: output of the scripts that compute FD and SES-FD, for native birds
-- 13_func_div_ses_world.rds: output of the scripts that compute FD and SES-FD for alien birds, using as global pool for null models all birds in the world (n=10,862)
-- 13_func_div_ses_world_alien_only.rds: output of the scripts that compute FD and SES-FD for alien birds, using as global pool for null models alien birds only (n=952)
+- `13_fric_+_ses_natives_isl_over3.rds`: output of the scripts that compute FD and SES-FD, for native birds
+- `13_func_div_ses_world.rds`: output of the scripts that compute FD and SES-FD for alien birds, using as global pool for null models all birds in the world (n=10,862)
+- `13_func_div_ses_world_alien_only.rds`: output of the scripts that compute FD and SES-FD for alien birds, using as global pool for null models alien birds only (n=952)
 
 
 ## References
