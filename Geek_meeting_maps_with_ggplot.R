@@ -1,5 +1,5 @@
 #savefiles 
-saveRDS(all_scaled, "Data/data1_maps_with_ggplot.RDS")
+#saveRDS(all_scaled, "Data/data1_maps_with_ggplot.RDS")
 
 # load datasets
 data1 <- readRDS("Data/data1_maps_with_ggplot.RDS")
@@ -13,14 +13,22 @@ library(tidyverse) # contains ggplot
 # get the background
 # usefull package: rnaturalearth => obtain world backgrounds in sf format
 # install.packages("rnaturalearth")
+france <- rnaturalearth::ne_countries(country="france", returnclass = "sf",)
+ggplot(france)+geom_sf()
 
 countries <- rnaturalearth::ne_countries(returnclass = "sf")
 # you can adjust the scale
 # or select only some countries or a continent
 europe <- rnaturalearth::ne_countries(continent = "europe", returnclass = "sf")
 
+france <- rnaturalearth::ne_states(country = "france", returnclass = "sf")
+unique(france$name)
+unique(france$region)
+
+corsica<- france %>% filter(name%in% c("Haute-Corse","Corse-du-Sud"))
+
 # plot simple feature
-ggplot(countries)+
+ggplot(corsica)+
   geom_sf()
 
 
@@ -107,3 +115,6 @@ ggplot(countries)+
   theme_bw()+
   theme(legend.direction = "vertical", legend.position = "right")
 
+
+library(raster)
+library(terra)
